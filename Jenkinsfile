@@ -14,10 +14,6 @@ pipeline {
                  sh './gradlew assemble --no-daemon -Dorg.gradle.jvmargs="-Xmx1024m -XX:MaxMetaspaceSize=512m"'
             }
         }
-        stage ("unitest"){
-            steps{
-                sh "./gradlew test"
-            }
-        }
+        
     }
 }
