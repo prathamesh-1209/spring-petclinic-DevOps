@@ -9,7 +9,7 @@ pipeline {
 
             }
         }
-        stage ("build code"){
+        stage ("build"){
             steps{
                  sh './gradlew assemble --no-daemon -Dorg.gradle.jvmargs="-Xmx1024m -XX:MaxMetaspaceSize=512m"'
             }
