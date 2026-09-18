@@ -11,7 +11,11 @@ pipeline {
         }
         stage ("build code"){
             steps{
-                sh './gradlew assemble'
+                stage('build code') {
+    steps {
+        sh './gradlew assemble --no-daemon -Dorg.gradle.jvmargs="-Xmx1024m -XX:MaxMetaspaceSize=512m"'
+    }
+}
             }
         }
         stage ("unitest"){
