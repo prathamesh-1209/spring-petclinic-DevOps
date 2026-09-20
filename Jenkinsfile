@@ -1,19 +1,30 @@
 pipeline {
-    agent any 
-    stages{
-        stage ("checkout"){
-            steps{
-                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'd62d92f5-64cc-4719-941c-3d89239dfe5b', url: 'https://github.com/prathamesh-1209/spring-petclinic-DevOps']])
+    agent any
 
-                
+    environment {
+        // Enforce lightweight JVM options globally for Gradle
+        GRADLE_OPTS = "-Dorg.gradle.jvmargs='-Xmx512m -XX:MaxMetaspaceSize=256m' -Dorg.gradle.daemon=false"
+    }
 
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
             }
         }
-        stage ("build code"){
-            steps{
-                 sh './gradlew assemble --no-daemon -Dorg.gradle.jvmargs="-Xmx1024m -XX:MaxMetaspaceSize=512m"'
+
+        stage('Build') {
+            steps {
+                // -x test skips tests to save build time and memory on t3.micro
+                sh './gradlew assemble -x test'
             }
         }
-        
+    }
+
+    post {
+        always {
+            // Clean workspace to keep the 8GB EBS disk from filling up
+            cleanWs()
+        }
     }
 }
