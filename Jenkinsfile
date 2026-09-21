@@ -13,7 +13,7 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Build c') {
             steps {
                 // -x test skips tests to save build time and memory on t3.micro
                 sh './gradlew assemble -x test'
